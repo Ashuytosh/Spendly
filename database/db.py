@@ -11,6 +11,16 @@ def get_db():
     return conn
 
 
+def create_user(name, email, password):
+    conn = get_db()
+    conn.execute(
+        "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+        (name, email, generate_password_hash(password)),
+    )
+    conn.commit()
+    conn.close()
+
+
 def init_db():
     conn = get_db()
     conn.execute("""
