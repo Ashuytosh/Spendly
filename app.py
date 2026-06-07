@@ -1,7 +1,8 @@
 import sqlite3
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, session
 from werkzeug.security import check_password_hash
-from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
+from database.db import get_db, init_db, seed_db, create_user, get_user_by_email, get_user_by_id, get_expense_summary
 
 app = Flask(__name__)
 app.secret_key = "spendly-dev-secret"
@@ -23,7 +24,7 @@ def landing():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if session.get("user_id"):
-        return redirect(url_for("landing"))
+        return redirect(url_for("profile"))
     if request.method == "GET":
         return render_template("register.html")
 
@@ -58,7 +59,7 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if session.get("user_id"):
-        return redirect(url_for("landing"))
+        return redirect(url_for("profile"))
     if request.method == "GET":
         return render_template("login.html")
 
@@ -78,7 +79,7 @@ def login():
     session.clear()
     session["user_id"]   = user["id"]
     session["user_name"] = user["name"]
-    return redirect(url_for("landing"))
+    return redirect(url_for("profile"))
 
 
 # ------------------------------------------------------------------ #
@@ -103,7 +104,22 @@ def logout():
 
 @app.route("/profile")
 def profile():
-    return "Profile page — coming in Step 4"
+    user_id = session.get("user_id")
+    if not user_id:
+        abort(401)
+
+    user         = get_user_by_id(user_id)
+    summary      = get_expense_summary(user_id)
+    member_since = datetime.strptime(user["created_at"][:10], "%Y-%m-%d").strftime("%B %d, %Y")
+    total_spent  = f"{summary['total_spent']:.2f}"
+
+    return render_template(
+        "profile.html",
+        user=user,
+        summary=summary,
+        member_since=member_since,
+        total_spent=total_spent,
+    )
 
 
 @app.route("/expenses/add")
