@@ -83,3 +83,35 @@ def seed_db():
     )
     conn.commit()
     conn.close()
+
+
+def get_user_by_id(user_id):
+    conn = get_db()
+    row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+    conn.close()
+    return row
+
+
+def get_expense_summary(user_id):
+    conn = get_db()
+    totals = conn.execute(
+        "SELECT COALESCE(SUM(amount), 0.0), COUNT(*) FROM expenses WHERE user_id = ?",
+        (user_id,),
+    ).fetchone()
+    top_row = conn.execute(
+        """
+        SELECT category
+        FROM expenses
+        WHERE user_id = ?
+        GROUP BY category
+        ORDER BY SUM(amount) DESC
+        LIMIT 1
+        """,
+        (user_id,),
+    ).fetchone()
+    conn.close()
+    return {
+        "total_spent":   float(totals[0]),
+        "expense_count": int(totals[1]),
+        "top_category":  top_row[0] if top_row else None,
+    }

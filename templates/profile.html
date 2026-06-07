@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile — Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+    <div class="profile-inner">
+
+        <!-- Account card -->
+        <section class="profile-card">
+            <div class="profile-card-top">
+                <div class="profile-avatar">{{ user.name[0] | upper }}</div>
+                <div class="profile-identity">
+                    <h1 class="profile-name">{{ user.name }}</h1>
+                    <span class="profile-badge">Personal Account</span>
+                </div>
+            </div>
+
+            <div class="profile-divider"></div>
+
+            <div class="profile-fields">
+                <div class="profile-field">
+                    <span class="profile-field-icon"><i data-lucide="user"></i></span>
+                    <span class="profile-field-label">Name</span>
+                    <span class="profile-field-value">{{ user.name }}</span>
+                </div>
+                <div class="profile-field">
+                    <span class="profile-field-icon"><i data-lucide="mail"></i></span>
+                    <span class="profile-field-label">Email</span>
+                    <span class="profile-field-value">{{ user.email }}</span>
+                </div>
+                <div class="profile-field">
+                    <span class="profile-field-icon"><i data-lucide="calendar"></i></span>
+                    <span class="profile-field-label">Member since</span>
+                    <span class="profile-field-value">{{ member_since }}</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Spending summary -->
+        <div class="profile-section-label">Spending Summary</div>
+        <div class="summary-strip">
+            <div class="stat-tile stat-tile--accent">
+                <div class="stat-tile-icon"><i data-lucide="credit-card"></i></div>
+                <span class="stat-value">${{ total_spent }}</span>
+                <span class="stat-label">Total Spent</span>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-tile-icon"><i data-lucide="receipt"></i></div>
+                <span class="stat-value">{{ summary.expense_count }}</span>
+                <span class="stat-label">Expenses</span>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-tile-icon"><i data-lucide="tag"></i></div>
+                <span class="stat-value stat-value--category">
+                    {% if summary.top_category %}{{ summary.top_category }}{% else %}—{% endif %}
+                </span>
+                <span class="stat-label">Top Category</span>
+            </div>
+        </div>
+
+        <!-- Action row -->
+        <div class="profile-actions">
+            <a href="{{ url_for('landing') }}" class="btn-ghost">
+                <i data-lucide="arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>lucide.createIcons();</script>
+{% endblock %}
