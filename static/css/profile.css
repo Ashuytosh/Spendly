@@ -207,6 +207,34 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Edit panels                                                         */
+/* ------------------------------------------------------------------ */
+
+.profile-edit-panel {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.75rem 2rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.profile-edit-panel .profile-section-label {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+}
+
+.profile-success {
+    background: var(--accent-light);
+    color: var(--accent);
+    border: 1px solid #b8d4bf;
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+}
+
+/* ------------------------------------------------------------------ */
 /* Responsive                                                          */
 /* ------------------------------------------------------------------ */
 

@@ -92,6 +92,26 @@ def get_user_by_id(user_id):
     return row
 
 
+def update_user(user_id, name, email):
+    conn = get_db()
+    conn.execute(
+        "UPDATE users SET name = ?, email = ? WHERE id = ?",
+        (name, email, user_id),
+    )
+    conn.commit()
+    conn.close()
+
+
+def update_password(user_id, new_password):
+    conn = get_db()
+    conn.execute(
+        "UPDATE users SET password_hash = ? WHERE id = ?",
+        (generate_password_hash(new_password), user_id),
+    )
+    conn.commit()
+    conn.close()
+
+
 def get_expense_summary(user_id):
     conn = get_db()
     totals = conn.execute(

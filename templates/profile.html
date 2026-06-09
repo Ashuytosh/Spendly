@@ -10,6 +10,16 @@
 <div class="profile-page">
     <div class="profile-inner">
 
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% if "successfully" in messages[0] %}
+            <div class="profile-success">{{ messages[0] }}</div>
+            {% else %}
+            <div class="auth-error">{{ messages[0] }}</div>
+            {% endif %}
+        {% endif %}
+        {% endwith %}
+
         <!-- Account card -->
         <section class="profile-card">
             <div class="profile-card-top">
@@ -61,6 +71,47 @@
                 </span>
                 <span class="stat-label">Top Category</span>
             </div>
+        </div>
+
+        <!-- Edit profile -->
+        <div class="profile-section-label">Edit Profile</div>
+        <div class="profile-edit-panel">
+            <form method="POST" action="{{ url_for('profile_edit') }}">
+                <div class="form-group">
+                    <label for="name">Full name</label>
+                    <input type="text" id="name" name="name"
+                           class="form-input" value="{{ user.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" id="email" name="email"
+                           class="form-input" value="{{ user.email }}" required>
+                </div>
+                <button type="submit" class="btn-submit">Save changes</button>
+            </form>
+        </div>
+
+        <!-- Change password -->
+        <div class="profile-section-label">Change Password</div>
+        <div class="profile-edit-panel">
+            <form method="POST" action="{{ url_for('profile_password') }}">
+                <div class="form-group">
+                    <label for="current_password">Current password</label>
+                    <input type="password" id="current_password" name="current_password"
+                           class="form-input" placeholder="Your current password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new_password">New password</label>
+                    <input type="password" id="new_password" name="new_password"
+                           class="form-input" placeholder="Min. 8 characters" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm new password</label>
+                    <input type="password" id="confirm_password" name="confirm_password"
+                           class="form-input" placeholder="Repeat new password" required>
+                </div>
+                <button type="submit" class="btn-submit">Update password</button>
+            </form>
         </div>
 
         <!-- Action row -->
