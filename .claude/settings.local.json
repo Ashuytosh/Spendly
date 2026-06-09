@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(venv/Scripts/python.exe -m pip install flask)",
-      "Bash(curl -s -c /tmp/spendly_cookies3.txt -X POST http://127.0.0.1:5001/login -d \"email=demo@spendly.com&password=wrongpass\")"
+      "Bash(curl -s -c /tmp/spendly_cookies3.txt -X POST http://127.0.0.1:5001/login -d \"email=demo@spendly.com&password=wrongpass\")",
+      "Bash(where node *)"
     ]
   }
 }

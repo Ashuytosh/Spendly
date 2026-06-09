@@ -1,0 +1,15 @@
+{
+  "env": {
+    "AGENTS_OBSERVE_PROJECT_SLUG": "expense-tracker",
+    "AGENTS_OBSERVE_API_BASE_URL": "http://127.0.0.1:4981/api",
+    "HOME": "C:\\Users\\Ashutosh Sahoo"
+  },
+  "hooks": {
+    "PreToolUse": [{"hooks": [{"type": "command", "command": "node \"C:\\Users\\Ashutosh Sahoo\\OneDrive\\Desktop\\agents-observe\\hooks\\scripts\\observe_cli.mjs\" hook-autostart"}]}],
+    "PostToolUse": [{"hooks": [{"type": "command", "command": "node \"C:\\Users\\Ashutosh Sahoo\\OneDrive\\Desktop\\agents-observe\\hooks\\scripts\\observe_cli.mjs\" hook-autostart"}]}],
+    "SessionStart": [{"hooks": [{"type": "command", "command": "node \"C:\\Users\\Ashutosh Sahoo\\OneDrive\\Desktop\\agents-observe\\hooks\\scripts\\observe_cli.mjs\" hook-autostart"}]}],
+    "SubagentStart": [{"hooks": [{"type": "command", "command": "node \"C:\\Users\\Ashutosh Sahoo\\OneDrive\\Desktop\\agents-observe\\hooks\\scripts\\observe_cli.mjs\" hook-autostart"}]}],
+    "SubagentStop": [{"hooks": [{"type": "command", "command": "node \"C:\\Users\\Ashutosh Sahoo\\OneDrive\\Desktop\\agents-observe\\hooks\\scripts\\observe_cli.mjs\" hook-autostart"}]}],
+    "Stop": [{"hooks": [{"type": "command", "command": "node \"C:\\Users\\Ashutosh Sahoo\\OneDrive\\Desktop\\agents-observe\\hooks\\scripts\\observe_cli.mjs\" hook-autostart"}]}]
+  }
+}
