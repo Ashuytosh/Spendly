@@ -112,22 +112,25 @@ def update_password(user_id, new_password):
     conn.close()
 
 
-def get_expense_summary(user_id):
+def get_expense_summary(user_id, date_from=None, date_to=None):
+    where = "WHERE user_id = ?"
+    params = [user_id]
+    if date_from is not None:
+        where += " AND date >= ?"
+        params.append(date_from)
+    if date_to is not None:
+        where += " AND date <= ?"
+        params.append(date_to)
+    p = tuple(params)
     conn = get_db()
     totals = conn.execute(
-        "SELECT COALESCE(SUM(amount), 0.0), COUNT(*) FROM expenses WHERE user_id = ?",
-        (user_id,),
+        "SELECT COALESCE(SUM(amount), 0.0), COUNT(*) FROM expenses " + where,
+        p,
     ).fetchone()
     top_row = conn.execute(
-        """
-        SELECT category
-        FROM expenses
-        WHERE user_id = ?
-        GROUP BY category
-        ORDER BY SUM(amount) DESC
-        LIMIT 1
-        """,
-        (user_id,),
+        "SELECT category FROM expenses " + where
+        + " GROUP BY category ORDER BY SUM(amount) DESC LIMIT 1",
+        p,
     ).fetchone()
     conn.close()
     return {

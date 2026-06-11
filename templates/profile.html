@@ -51,8 +51,26 @@
             </div>
         </section>
 
+        <!-- Date filter -->
+        <form class="date-filter-form" method="GET" action="{{ url_for('profile') }}">
+            <div class="date-filter-fields">
+                <label for="date_from">From</label>
+                <input type="date" id="date_from" name="date_from"
+                       class="form-input date-input" value="{{ date_from }}">
+                <label for="date_to">To</label>
+                <input type="date" id="date_to" name="date_to"
+                       class="form-input date-input" value="{{ date_to }}">
+            </div>
+            <div class="date-filter-actions">
+                <button type="submit" class="btn-filter">Filter</button>
+                <a href="{{ url_for('profile') }}" class="btn-ghost btn-clear">Clear</a>
+            </div>
+        </form>
+
         <!-- Spending summary -->
-        <div class="profile-section-label">Spending Summary</div>
+        <div class="profile-section-label">
+            Spending Summary{% if date_from or date_to %} (filtered){% endif %}
+        </div>
         <div class="summary-strip">
             <div class="stat-tile stat-tile--accent">
                 <div class="stat-tile-icon"><i data-lucide="credit-card"></i></div>
@@ -76,7 +94,7 @@
         <!-- Edit profile -->
         <div class="profile-section-label">Edit Profile</div>
         <div class="profile-edit-panel">
-            <form method="POST" action="{{ url_for('profile_edit') }}">
+            <form method="POST" action="{{ url_for('profile_edit', date_from=date_from if date_from else None, date_to=date_to if date_to else None) }}">
                 <div class="form-group">
                     <label for="name">Full name</label>
                     <input type="text" id="name" name="name"
@@ -94,7 +112,7 @@
         <!-- Change password -->
         <div class="profile-section-label">Change Password</div>
         <div class="profile-edit-panel">
-            <form method="POST" action="{{ url_for('profile_password') }}">
+            <form method="POST" action="{{ url_for('profile_password', date_from=date_from if date_from else None, date_to=date_to if date_to else None) }}">
                 <div class="form-group">
                     <label for="current_password">Current password</label>
                     <input type="password" id="current_password" name="current_password"
