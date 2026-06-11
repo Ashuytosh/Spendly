@@ -17,6 +17,23 @@ with app.app_context():
 
 
 # ------------------------------------------------------------------ #
+# Helpers                                                             #
+# ------------------------------------------------------------------ #
+
+def _parse_date(raw):
+    try:
+        datetime.strptime(raw, "%Y-%m-%d")
+        return raw
+    except (ValueError, TypeError):
+        return None
+
+
+def _profile_redirect():
+    kwargs = {k: request.args[k] for k in ("date_from", "date_to") if request.args.get(k)}
+    return redirect(url_for("profile", **kwargs))
+
+
+# ------------------------------------------------------------------ #
 # Routes                                                              #
 # ------------------------------------------------------------------ #
 
@@ -112,8 +129,11 @@ def profile():
     if not user_id:
         abort(401)
 
+    date_from = _parse_date(request.args.get("date_from", ""))
+    date_to   = _parse_date(request.args.get("date_to", ""))
+
     user         = get_user_by_id(user_id)
-    summary      = get_expense_summary(user_id)
+    summary      = get_expense_summary(user_id, date_from=date_from, date_to=date_to)
     member_since = datetime.strptime(user["created_at"][:10], "%Y-%m-%d").strftime("%B %d, %Y")
     total_spent  = f"{summary['total_spent']:.2f}"
 
@@ -123,6 +143,8 @@ def profile():
         summary=summary,
         member_since=member_since,
         total_spent=total_spent,
+        date_from=date_from or "",
+        date_to=date_to or "",
     )
 
 
@@ -137,20 +159,20 @@ def profile_edit():
 
     if not name:
         flash("Name is required.")
-        return redirect(url_for("profile"))
+        return _profile_redirect()
     if not email:
         flash("Email is required.")
-        return redirect(url_for("profile"))
+        return _profile_redirect()
 
     try:
         update_user(user_id, name, email)
     except sqlite3.IntegrityError:
         flash("That email address is already in use.")
-        return redirect(url_for("profile"))
+        return _profile_redirect()
 
     session["user_name"] = name
     flash("Profile updated successfully.")
-    return redirect(url_for("profile"))
+    return _profile_redirect()
 
 
 @app.route("/profile/password", methods=["POST"])
@@ -167,17 +189,17 @@ def profile_password():
 
     if not check_password_hash(user["password_hash"], current):
         flash("Current password is incorrect.")
-        return redirect(url_for("profile"))
+        return _profile_redirect()
     if len(new_pw) < 8:
         flash("New password must be at least 8 characters.")
-        return redirect(url_for("profile"))
+        return _profile_redirect()
     if new_pw != confirm:
         flash("New passwords do not match.")
-        return redirect(url_for("profile"))
+        return _profile_redirect()
 
     update_password(user_id, new_pw)
     flash("Password changed successfully.")
-    return redirect(url_for("profile"))
+    return _profile_redirect()
 
 
 @app.route("/expenses/add")

@@ -235,6 +235,61 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Date filter                                                         */
+/* ------------------------------------------------------------------ */
+
+.date-filter-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.date-filter-fields {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.date-filter-fields label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-bottom: 0;
+}
+
+.date-input {
+    width: 150px;
+}
+
+.date-filter-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.btn-filter {
+    padding: 0.5rem 1rem;
+    background: var(--accent);
+    color: var(--paper);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+}
+
+.btn-filter:hover {
+    opacity: 0.88;
+}
+
+.btn-clear {
+    font-size: 0.85rem;
+    padding: 0.45rem 0.875rem;
+}
+
+/* ------------------------------------------------------------------ */
 /* Responsive                                                          */
 /* ------------------------------------------------------------------ */
 
