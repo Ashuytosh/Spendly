@@ -7,7 +7,7 @@ from database.db import (
     get_db, init_db, seed_db,
     create_user, get_user_by_email, get_user_by_id,
     get_expense_summary, update_user, update_password,
-    create_expense,
+    create_expense, get_expense_by_id, get_expenses_for_user, update_expense,
 )
 
 app = Flask(__name__)
@@ -136,6 +136,7 @@ def profile():
 
     user         = get_user_by_id(user_id)
     summary      = get_expense_summary(user_id, date_from=date_from, date_to=date_to)
+    expenses     = get_expenses_for_user(user_id, date_from=date_from, date_to=date_to)
     member_since = datetime.strptime(user["created_at"][:10], "%Y-%m-%d").strftime("%B %d, %Y")
     total_spent  = f"{summary['total_spent']:.2f}"
 
@@ -143,6 +144,7 @@ def profile():
         "profile.html",
         user=user,
         summary=summary,
+        expenses=expenses,
         member_since=member_since,
         total_spent=total_spent,
         date_from=date_from or "",
@@ -253,9 +255,49 @@ def add_expense():
     return redirect(url_for("profile"))
 
 
-@app.route("/expenses/<int:id>/edit")
+@app.route("/expenses/<int:id>/edit", methods=["GET", "POST"])
 def edit_expense(id):
-    return "Edit expense — coming in Step 8"
+    user_id = session.get("user_id")
+    if not user_id:
+        abort(401)
+
+    expense = get_expense_by_id(id)
+    if expense is None:
+        abort(404)
+    if expense["user_id"] != user_id:
+        abort(403)
+
+    if request.method == "GET":
+        return render_template("edit_expense.html", expense=expense, form=dict(expense))
+
+    amount_raw  = request.form.get("amount", "").strip()
+    category    = request.form.get("category", "").strip()
+    date_raw    = request.form.get("date", "").strip()
+    description = request.form.get("description", "").strip()
+
+    form = {"amount": amount_raw, "category": category,
+            "date": date_raw, "description": description}
+
+    try:
+        amount = float(amount_raw)
+        if amount <= 0 or not math.isfinite(amount):
+            raise ValueError
+    except (ValueError, TypeError):
+        flash("Amount must be a positive number.")
+        return render_template("edit_expense.html", expense=expense, form=form)
+
+    if category not in VALID_CATEGORIES:
+        flash("Please select a valid category.")
+        return render_template("edit_expense.html", expense=expense, form=form)
+
+    date = _parse_date(date_raw)
+    if not date:
+        flash("Date must be in YYYY-MM-DD format.")
+        return render_template("edit_expense.html", expense=expense, form=form)
+
+    update_expense(id, amount, category, date, description)
+    flash("Expense updated successfully.")
+    return redirect(url_for("profile"))
 
 
 @app.route("/expenses/<int:id>/delete")

@@ -123,6 +123,41 @@ def create_expense(user_id, amount, category, date, description):
     conn.close()
 
 
+def get_expense_by_id(expense_id):
+    conn = get_db()
+    row = conn.execute("SELECT * FROM expenses WHERE id = ?", (expense_id,)).fetchone()
+    conn.close()
+    return row
+
+
+def get_expenses_for_user(user_id, date_from=None, date_to=None):
+    where = "WHERE user_id = ?"
+    params = [user_id]
+    if date_from:
+        where += " AND date >= ?"
+        params.append(date_from)
+    if date_to:
+        where += " AND date <= ?"
+        params.append(date_to)
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT * FROM expenses " + where + " ORDER BY date DESC",
+        tuple(params),
+    ).fetchall()
+    conn.close()
+    return rows
+
+
+def update_expense(expense_id, amount, category, date, description):
+    conn = get_db()
+    conn.execute(
+        "UPDATE expenses SET amount = ?, category = ?, date = ?, description = ? WHERE id = ?",
+        (float(amount), category, date, description or None, expense_id),
+    )
+    conn.commit()
+    conn.close()
+
+
 def get_expense_summary(user_id, date_from=None, date_to=None):
     where = "WHERE user_id = ?"
     params = [user_id]

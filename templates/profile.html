@@ -91,6 +91,30 @@
             </div>
         </div>
 
+        <!-- Expense list -->
+        <div class="profile-section-label">Your Expenses</div>
+        {% if expenses %}
+        <div class="expense-list">
+            {% for expense in expenses %}
+            <div class="expense-row">
+                <div class="expense-meta">
+                    <span class="expense-date">{{ expense.date }}</span>
+                    <span class="expense-category">{{ expense.category }}</span>
+                </div>
+                <div class="expense-right">
+                    <span class="expense-amount">${{ "%.2f"|format(expense.amount) }}</span>
+                    <a href="{{ url_for('edit_expense', id=expense.id) }}" class="btn-ghost btn-edit">Edit</a>
+                </div>
+                {% if expense.description %}
+                <div class="expense-description">{{ expense.description }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="expense-empty">No expenses yet{% if date_from or date_to %} for this date range{% endif %}.</p>
+        {% endif %}
+
         <!-- Edit profile -->
         <div class="profile-section-label">Edit Profile</div>
         <div class="profile-edit-panel">
