@@ -290,6 +290,85 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Expense list                                                        */
+/* ------------------------------------------------------------------ */
+
+.expense-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.expense-row {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.875rem 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.expense-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.expense-date {
+    font-size: 0.825rem;
+    color: var(--ink-muted);
+    white-space: nowrap;
+}
+
+.expense-category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+    white-space: nowrap;
+}
+
+.expense-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.expense-amount {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
+}
+
+.btn-edit {
+    font-size: 0.78rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-sm);
+}
+
+.expense-description {
+    width: 100%;
+    font-size: 0.825rem;
+    color: var(--ink-muted);
+    padding-top: 0.25rem;
+}
+
+.expense-empty {
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+    font-style: italic;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* ------------------------------------------------------------------ */
 /* Responsive                                                          */
 /* ------------------------------------------------------------------ */
 
