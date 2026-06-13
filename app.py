@@ -1,3 +1,4 @@
+import math
 import sqlite3
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash, abort, session
@@ -6,6 +7,7 @@ from database.db import (
     get_db, init_db, seed_db,
     create_user, get_user_by_email, get_user_by_id,
     get_expense_summary, update_user, update_password,
+    create_expense,
 )
 
 app = Flask(__name__)
@@ -209,9 +211,46 @@ def analytics():
     return render_template("analytics.html")
 
 
-@app.route("/expenses/add")
+VALID_CATEGORIES = ["Food", "Transport", "Bills", "Health", "Entertainment", "Shopping", "Other"]
+
+
+@app.route("/expenses/add", methods=["GET", "POST"])
 def add_expense():
-    return "Add expense — coming in Step 7"
+    user_id = session.get("user_id")
+    if not user_id:
+        abort(401)
+
+    if request.method == "GET":
+        return render_template("add_expense.html", form={})
+
+    amount_raw  = request.form.get("amount", "").strip()
+    category    = request.form.get("category", "").strip()
+    date_raw    = request.form.get("date", "").strip()
+    description = request.form.get("description", "").strip()
+
+    form = {"amount": amount_raw, "category": category,
+            "date": date_raw, "description": description}
+
+    try:
+        amount = float(amount_raw)
+        if amount <= 0 or not math.isfinite(amount):
+            raise ValueError
+    except (ValueError, TypeError):
+        flash("Amount must be a positive number.")
+        return render_template("add_expense.html", form=form)
+
+    if category not in VALID_CATEGORIES:
+        flash("Please select a valid category.")
+        return render_template("add_expense.html", form=form)
+
+    date = _parse_date(date_raw)
+    if not date:
+        flash("Date must be in YYYY-MM-DD format.")
+        return render_template("add_expense.html", form=form)
+
+    create_expense(user_id, amount, category, date, description)
+    flash("Expense added successfully.")
+    return redirect(url_for("profile"))
 
 
 @app.route("/expenses/<int:id>/edit")

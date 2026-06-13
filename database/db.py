@@ -112,6 +112,17 @@ def update_password(user_id, new_password):
     conn.close()
 
 
+def create_expense(user_id, amount, category, date, description):
+    conn = get_db()
+    conn.execute(
+        "INSERT INTO expenses (user_id, amount, category, date, description)"
+        " VALUES (?, ?, ?, ?, ?)",
+        (user_id, float(amount), category, date, description or None),
+    )
+    conn.commit()
+    conn.close()
+
+
 def get_expense_summary(user_id, date_from=None, date_to=None):
     where = "WHERE user_id = ?"
     params = [user_id]
