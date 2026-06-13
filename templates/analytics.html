@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Analytics — Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="analytics-wrapper">
+    <div class="analytics-card">
+        <div class="analytics-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L12 9"/>
+                <path d="M17.64 15 22 10.64"/>
+                <path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 5.6a5.009 5.009 0 0 0-6.22.78l-1.45 1.45 2.83 2.83 1.45-1.45.13.14 1.77 1.77-.87.87L17 18l3-3-.87-.87L17.64 15Z"/>
+            </svg>
+        </div>
+
+        <div class="analytics-copy">
+            <h1 class="analytics-title">Coming soon</h1>
+            <p class="analytics-sub">We're still building this feature. You'll be the first to know when it's ready.</p>
+        </div>
+
+        <div class="analytics-action">
+            <button class="btn-notify" id="notifyBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                </svg>
+                Notify me
+            </button>
+            <p class="analytics-notified" id="notifiedMsg">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                </svg>
+                We'll notify you when it's live.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    (function () {
+        var btn = document.getElementById('notifyBtn');
+        var msg = document.getElementById('notifiedMsg');
+        btn.addEventListener('click', function () {
+            btn.style.display = 'none';
+            msg.style.display = 'flex';
+        });
+    })();
+</script>
+{% endblock %}
