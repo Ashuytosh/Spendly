@@ -353,6 +353,26 @@
     border-radius: var(--radius-sm);
 }
 
+.delete-form {
+    display: inline-flex;
+}
+
+.btn-delete {
+    font-size: 0.78rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--danger);
+    background: var(--danger-light);
+    color: var(--danger);
+    font-family: var(--font-body);
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: var(--danger);
+    color: var(--paper-card);
+}
+
 .expense-description {
     width: 100%;
     font-size: 0.825rem;
